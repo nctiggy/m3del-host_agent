@@ -8,9 +8,4 @@ package { 'HostAgent-Linux-32-x86-en_US-1.3.1.1.0033-1.i386.rpm':
 
 package { 'glibc-2.12-1.132.el6.i686':
 	ensure => installed,
-	require => Exec['/usr/bin/yum check-update'],
-}
-
-exec { '/usr/bin/yum check-update':
-	returns => 100
 }
