@@ -1,0 +1,156 @@
+###########################
+# Navisphere agent.config
+###########################
+#
+# This file is used by Navisphere Agent to configure site-specific values.
+#
+# All entries in this file have this form:
+#
+# object  value-list
+#
+# where "object" tells what sort of information is to be configured,
+# and "value-list" is a whitespace-separated list of values to be
+# configured.  Samples, which should be edited, appear below for all
+# permissible types of object.
+#
+# White space (tabs, space, line-feeds, carriage-returns)
+# and blank lines are ignored;
+# To continue a line onto the next line, use "\" as
+# the last character of that line.  The "\" is dropped
+# when the next line is concatenated to the continued line.
+#
+###########################
+
+#
+# Description specification
+# -------------------------
+#
+# The "clarDescr" object takes arbitrary text values intended to
+# describe the agent and its location.
+#
+
+clarDescr <%= @host_desc %>
+
+#
+# The "clarContact" object takes arbitrary text values intended to
+# describe who is responsible for the configured agent, and how to
+# reach them.
+#
+
+clarContact <%= @host_contactname %>, <%= @host_contactphone %>
+
+#
+# Device specification
+# --------------------
+#
+# The format of "device" objects for CLARiiON devices is:
+# device	device-spec	name	"description"
+#
+# where the device-spec is the device name to open to access
+# the CLARiiON device.  It can be a SCSI-2 file name.  If this is
+# "auto", all attached arrays with bound LUNs will be automatically
+# configured.  (Currently, dummy arguments are required for name
+# and description, when using auto-configuration.)  This can NOT
+# be defaulted.
+#
+# The name is the per-CLARiiON name that can be used to identify each
+# CLARiiON to the manager application.  The name is REQUIRED and cannot
+# contain spaces (even if surrounded by quotes).  This can NOT
+# be defaulted.
+#
+# The description is a quoted string that contains a brief description
+# of the CLARiiON chassis being managed.  It defaults to "" if not
+# specified, and to the device name for auto-configuration.
+#
+
+# SAMPLES:
+#device sga NAVISPHERE-8 "NAVISPHERE-8"
+#device sgb NAVISPHERE-1 "NAVISPHERE-1"
+#device sgc NAVISPHERE-2 "NAVISPHERE-2"
+#device sgd NAVISPHERE-3 "NAVISPHERE-3"
+#device sge NAVISPHERE-4 "NAVISPHERE-4"
+#device sgf NAVISPHERE-5 "NAVISPHERE-5"
+#device sgg NAVISPHERE-6 "NAVISPHERE-6"
+#device sgh NAVISPHERE-7 "NAVISPHERE-7"
+#device sg0 NAVISPHERE-0 "NAVISPHERE-0"
+#device sg1 NAVISPHERE-1 "NAVISPHERE-1"
+#device sg2 NAVISPHERE-2 "NAVISPHERE-2"
+#device sg3 NAVISPHERE-3 "NAVISPHERE-3"
+#device sg4 NAVISPHERE-4 "NAVISPHERE-4"
+#device sg5 NAVISPHERE-5 "NAVISPHERE-5"
+#device sg6 NAVISPHERE-6 "NAVISPHERE-6"
+#device sg7 NAVISPHERE-7 "NAVISPHERE-7"
+
+# automatically detect manageable devices
+device <%= @host_device %> <%= @array_name %>
+
+#
+# User Specification.
+# ------------------
+#
+# The format of "user" objects is:
+#       user localUserId
+# OR
+#       user userId@hostname
+#
+# These build a list of users who are allowed to perform WRITE
+# operations to the CLARiiON devices managed by this agent.  By
+# default, as specified below, only root on this machine has WRITE
+# access.  Others can be granted access by including their login name
+# and host which they can access from.  A null list prevents anyone,
+# including admin, from having write access.  In order to get write
+# access, this file would have to be modified and the Agent stopped
+# and restarted to re-read the configuration file, or an appropriate
+# remote configuration request would have to be sent to the agent from
+# an already-privileged user.
+#
+
+
+user <%= @user_names %>
+#user system@<SPA and SPB>
+#user sblue@picasso    # individual user "sblue" on host "picasso"
+#user lgreen@hannibal  # individual user "lgreen" on host "hannibal"
+
+#
+# Poll Specification
+# ------------------
+#
+# The "poll" object takes a numerical count of seconds.
+#
+# This specifies how often the agent solicits information from the
+# array, rather than using cached information.  The minimum is "10".
+#
+
+poll <%= @poll_rate %>
+
+#
+# Eventlog Specification
+# ----------------------
+#
+# The eventlog object takes a numerical count of log entries.
+#
+# This defines the maximum number of SP log events received by the
+# agent on startup, and received by clients per poll.  A value of 0
+# causes the device's entire log to be read at startup.  A minimum
+# of 100 events will be read on serial, and 2048 on fibre, overriding
+# any lower value configured below.
+#
+
+eventlog <%= @event_log %>
+
+#
+# Baud Rate Specification
+# ----------------------
+#
+# If the agent is using a serial port to manage a device, the next entry can 
+# specify either 9600 baud or 19200 baud.
+#
+
+baud <%= @baud_rate %>
+
+#linux currently can't handle this
+#nomegapoll
+
+###
+# end of configuration file
+###
